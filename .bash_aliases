@@ -25,7 +25,7 @@ vim() {
     if hash nvim 2>/dev/null; then
         nvim "$@"
     else
-        "$DEFAUT_VIM_BIN" "$@"
+        eval "$DEFAUT_VIM_BIN $@"
     fi
 }
 
