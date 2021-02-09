@@ -25,14 +25,9 @@ if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
 fi
 
 # force using neovim instead of vim if exists
-DEFAULT_VIM_BIN=$(which vim)
-vim() {
-    if hash nvim 2>/dev/null; then
-        nvim "$@"
-    else
-        eval "$DEFAUT_VIM_BIN $@"
-    fi
-}
+if hash nvim 2>/dev/null; then
+    alias vim='nvim'
+fi
 
 # xdg-open shortcut
 if [[ "$OSTYPE" == "linux-gnu"*  ]]; then
