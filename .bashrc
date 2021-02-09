@@ -7,6 +7,16 @@
 # if not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# personaly prefer to define all aliases in a seperate file
+if [ -f "$HOME/.bash_aliases" ]; then
+    . "$HOME/.bash_aliases"
+fi
+
+export EDITOR="nvim"
+
+# other stuff ...
+export GPG_TTY=$(tty)
+
 export PATH="$PATH:$HOME/.yarn/bin"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -45,44 +55,38 @@ case "$TERM" in
     xterm-color) color_prompt=yes;;
 esac
 
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-    # we have color support; assume it's compliant with Ecma-48
-    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-    # a case would tend to support setf rather than setaf.)
-        color_prompt=yes
-    else
-        color_prompt=
-    fi
-fi
-
-if [ "$color_prompt" = yes ]; then
-    PS1='[\[\033[36m\]μ\[\033[00m\] \[\033[35m\]\W\[\033[00m\]]$(declare -F | grep -q __git_ps1$ && __git_ps1 "[%s]")$ '
+if hash starship 2>/dev/null; then
+    eval "$(starship init bash)"
 else
-    PS1='[μ \W]\$ '
+    # uncomment for a colored prompt, if the terminal has the capability; turned
+    # off by default to not distract the user: the focus in a terminal window
+    # should be on the output of commands, not on the prompt
+    force_color_prompt=yes
+
+    if [ -n "$force_color_prompt" ]; then
+        if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+        # we have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+            color_prompt=yes
+        else
+            color_prompt=
+        fi
+    fi
+
+    if [ "$color_prompt" = yes ]; then
+        PS1='[\[\033[36m\]μ\[\033[00m\] \[\033[35m\]\W\[\033[00m\]]$(declare -F | grep -q __git_ps1$ && __git_ps1 "[%s]")$ '
+    else
+        PS1='[μ \W]\$ '
+    fi
+    unset color_prompt force_color_prompt
+
+    # If this is an xterm set the title to user@host:dir
+    case "$TERM" in
+    xterm*|rxvt*)
+        PS1="\[\e]0;\u at \h:\W\a\]$PS1"
+        ;;
+    *)
+        ;;
+    esac
 fi
-unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;\u at \h:\W\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# personaly prefer to define all aliases in a seperate file
-if [ -f "$HOME/.bash_aliases" ]; then
-    . "$HOME/.bash_aliases"
-fi
-
-export EDITOR="nvim"
-
-# other stuff ...
-export GPG_TTY=$(tty)
