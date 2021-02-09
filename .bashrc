@@ -82,7 +82,7 @@ if [ -f "$HOME/.bash_aliases" ]; then
     . "$HOME/.bash_aliases"
 fi
 
-export EDITOR="vim"
+export EDITOR="nvim"
 
 # other stuff ...
 export GPG_TTY=$(tty)
