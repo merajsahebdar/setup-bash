@@ -1,3 +1,5 @@
+# vim:set ts=4 sw=4 et tw=100: expandtab
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
